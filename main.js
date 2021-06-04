@@ -23,17 +23,24 @@ renderer.render(scene,camera);
 // set up game loops so we dont have to keep calling renderer
 function animate(){
   requestAnimationFrame(animate);
-
+  // rotate torus
   torus.rotation.x += 0.01;
   torus.rotation.y += 0.005;
   torus.rotation.z += 0.01;
 
+  // rotate d20
+  d20.rotation.z += .01;
+  // set up moving light
+  const timer = Date.now() * 0.00025;
+  particleLight.position.x = Math.sin( timer * 7 ) * 50;
+	particleLight.position.y = Math.cos( timer * 5 ) * 150;
+	particleLight.position.z = Math.cos( timer * 3 ) * 50;
   controls.update();
   renderer.render(scene, camera);
 }
 
 // Create an object
-const geometry = new THREE.TorusGeometry( 10, 3, 16, 100)
+const geometry = new THREE.TorusGeometry( 8, 2.5, 15, 100)
 const material = new THREE.MeshStandardMaterial({color: 0xFF6347});
 const torus = new THREE.Mesh( geometry, material);
 
@@ -45,15 +52,23 @@ const pointLight = new THREE.PointLight(0xffffff)
 pointLight.position.set(5,5,5)
 // ambient light is more like a flood light
 const ambientLight = new THREE.AmbientLight(0xffffff);
+let particleLight = new THREE.Mesh(new THREE.SphereGeometry(1, 4, 4), new THREE.MeshBasicMaterial({ color: 0xffffff}));
+scene.add(particleLight);
+const pointLight2 = new THREE.PointLight( 0xffffff, 2, 800 );
+particleLight.add( pointLight2 );
+const light = new THREE.PointLight(0xffffff, 2, 100);
+light.position.set(4, 3,47);
+scene.add(pointLight, ambientLight,light)
 
-scene.add(pointLight, ambientLight)
+//scene.add(light);
 
-/* Used for testing
+ //Used for testing
 // light helper shows us the position of a light
 const lightHelper = new THREE.PointLightHelper(pointLight)
+const lightHelper2 = new THREE.PointLightHelper(light)
 const gridHelper = new THREE.GridHelper(200, 50);
-scene.add(lightHelper, gridHelper)
-*/
+scene.add(lightHelper, gridHelper, lightHelper2)
+
 // will listen for a dom events on the mouse and update the camera position
 const controls = new OrbitControls(camera, renderer.domElement);
 
@@ -96,17 +111,29 @@ const moon = new THREE.Mesh(
     map: moonTexture, 
     normalMap: normalTexture
   })
-)
+);
 scene.add(moon);
 moon.position.setZ(30);
 moon.position.setX(-10);
 
+// adding d20
+//const d20Texture = new THREE.TextureLoader().load('d20TextMap.png');
+const d20Geometry = new THREE.IcosahedronGeometry(2,0);
+const d20Material = new THREE.MeshStandardMaterial({color: 0x41838});
+d20Material.roughness = .3;
+d20Material.metalness = .8;
+const d20 = new THREE.Mesh(d20Geometry, d20Material);
+scene.add(d20);
+d20.position.setZ(43);
+d20.position.setX(10);
+d20.rotation.x = 90;
+
 function moveCamera(){
   // calculate where the user has scrolled to
   const t = document.body.getBoundingClientRect().top;
-  moon.rotation.x += 0.05;
+  moon.rotation.x += 0.005;
   moon.rotation.y += 0.075;
-  moon.rotation.z += 0.05;
+  moon.rotation.z += 0.005;
 
   daniel.rotation.y += 0.01;
   daniel.rotation.z += 0.01;

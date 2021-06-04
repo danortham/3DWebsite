@@ -77,6 +77,15 @@ canvas {
     line-height: 1;
   }
 
+  .contactMe {
+    grid-column: 3 / 10;
+    padding: 1rem;
+    background: var(--dark-bg);
+    font-size: 1.25rem;
+    line-height: 1.5;
+    margin-bottom: var(--spacing);
+  }
+
   .left {
     grid-column: 6 / 12;
   }
