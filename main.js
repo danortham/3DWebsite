@@ -62,13 +62,13 @@ scene.add(pointLight, ambientLight,light)
 
 //scene.add(light);
 
- //Used for testing
+/* //Used for testing
 // light helper shows us the position of a light
 const lightHelper = new THREE.PointLightHelper(pointLight)
 const lightHelper2 = new THREE.PointLightHelper(light)
 const gridHelper = new THREE.GridHelper(200, 50);
 scene.add(lightHelper, gridHelper, lightHelper2)
-
+*/
 // will listen for a dom events on the mouse and update the camera position
 const controls = new OrbitControls(camera, renderer.domElement);
 
